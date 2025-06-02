@@ -1,3 +1,9 @@
+# Fonctions
+def calculer_anciennete(annee_embauche, annee_fin):
+    resultat = annee_fin - annee_embauche
+    return resultat
+
+
 # Déclaration variables
 
 prenom = "Alice"
@@ -36,3 +42,20 @@ matrice = [
     [7, 8, 9]
 ]
 print(matrice[1][1])
+
+# listes
+services.append("Support")
+services.insert(1, "R&D")
+services.remove("Ventes")
+print(services)
+
+# dictionnaires
+salaire_par_employe = {"Alice": 2500.75, "Bob": 3000.50, "Charlie": 2800.00}
+print(salaire_par_employe["Bob"])
+
+
+
+anciennete = calculer_anciennete(2015, 2023)
+print("Ancienneté :", anciennete, "ans")
+
+

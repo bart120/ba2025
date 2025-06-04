@@ -50,5 +50,26 @@ with PdfPages(f"{figures_dir}/rapports.pdf") as pdf:
             plt.close()
 
 # rapport excel
+with pd.ExcelWriter("rapport_rh.xlsx") as writer:
+    employes.to_excel(writer, sheet_name="Employes", index=False)
+    absences.to_excel(writer, sheet_name="Absences", index=False)
+
+    taux = absences.groupby("ID")["Duree"].sum().reset_index()
+    merged = pd.merge(employes, taux, on="ID", how="left").fillna(0)
+    merged["Taux"] = merged["Duree"] / merged["Anciennete"]
+
+    #merged[["ID", "Nom", "Service", "Anciennete", "Taux"]].to_excel(writer, sheet_name="Taux_absence", index=False)
+    merged[["ID", "Nom", "Service", "Anciennete", "Duree"]].to_excel(writer, sheet_name="Taux_absence", index=False)
+
+    workbook = writer.book
+    worksheet = writer.sheets["Taux_absence"]
+
+    worksheet.write(0, 5, "Taux")
+    for row in range(1, len(merged)+1):
+        formule = f"=IF(D{row+1}=0, 0, E{row+1}/D{row+1})"
+        worksheet.write(row, 5, formule)
+
+
+
 
 

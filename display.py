@@ -45,6 +45,16 @@ plt.ylabel("Durée cumulée des absences (jours)")
 plt.tight_layout()
 plt.savefig("absences_mensuelles.png")
 
+merged = pd.merge(absences, employes[["ID", "Service"]], on="ID", how="left")
+merged["Mois"] = merged["Date"].dt.to_period("M").astype(str)
+
+pivot_table = merged.pivot_table(index="Service", columns="Mois", values="Duree", aggfunc="sum").fillna(0)
+
+plt.figure(figsize=(10, 5))
+sns.heatmap(pivot_table, annot=True, fmt=".0f", cmap="YlOrBr")
+plt.title("Heatmap des absences par mois et service")
+plt.tight_layout()
+plt.savefig("absences_mos_services.png")
 
 
 

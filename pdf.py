@@ -33,3 +33,22 @@ plt.title("Salaires par service")
 plt.tight_layout()
 plt.savefig(f"{figures_dir}/salaires.png")
 plt.close()
+
+# rapport PDF
+
+#pdf = PdfPages(f"{figures_dir}/rapports.pdf")
+#....
+#pdf.close() # 2 lignes remplacées par le "with"
+with PdfPages(f"{figures_dir}/rapports.pdf") as pdf:
+    for file in os.listdir(figures_dir):
+        if file.endswith(".png"):
+            fig = plt.figure()
+            img = plt.imread(f"{figures_dir}/{file}")
+            plt.imshow(img)
+            plt.axis("off")
+            pdf.savefig(fig)
+            plt.close()
+
+# rapport excel
+
+

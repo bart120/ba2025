@@ -1,4 +1,4 @@
-
+OPEN_API_KEY = ""
 
 #pip install openai dotenv
 
@@ -32,3 +32,23 @@ data = pd.read_csv("employes.csv")
 
 reco = generer_reco("Wassila", "consultante en relation des employés", 5)
 print(reco)
+
+def generer_rapport(df):
+    nb = len(df)
+    df["Age"] = 2025 - pd.to_datetime(df["Date_Naissance"]).dt.year
+    moyenne_age = df['Age'].mean()
+    nb_femmes = df[df['Sexe'] == 'F'].shape[0]
+    prompt = f"""
+    Rédige un rapport synthétique RH destiné à la direction, basé sur les éléments suivants :
+    - Nombre total d'employés : {nb}
+    - Âge moyen : {moyenne_age:.1f}
+    - Nombre de femmes : {nb_femmes}
+    Présente cela de façon claire et concise.
+    """
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.6
+    )
+    return response["choices"][0]["message"]["content"].strip()
+print(generer_rapport(data))
